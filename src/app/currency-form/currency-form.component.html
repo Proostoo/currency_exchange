@@ -1,21 +1,24 @@
 <!-- currency-form.component.html -->
 
-<div class="d-flex align-items-center h-100 calculatoform p-5" >
+<div class="d-flex align-items-center h-100 calculatoform p-5">
     <div class="form-group m-4">
-        <div class="col-12">
-            <label for="currencySelect">Waluta:</label>
-            <select #currency id="currencySelect" class="form-control mt-2"
-                (change)="onCurrencySelected(currency.value)">
-                <option *ngFor="let currency of currencies" [value]="currency.code">[{{ currency.code }}] {{
-                    currency.currency }}</option>
-            </select>
-        </div>
-        <div class="col-12 mt-5">
-            <label for="amountInput">Kwota do przeliczenia:</label>
-            <input type="number" class="form-control" id="amountInput" name="amount">
-        </div>
-        <div class="col-12 mt-5  text-center">
-            <button class="btn btn-primary" >Kalkuluj!</button>
-        </div>
-    </div>
-</div>
+      <div class="col-12">
+        <label for="currencySelect">Waluta:</label>
+        <select #currency id="currencySelect" class="form-control mt-2" (change)="onCurrencySelected(currency.value)">
+          <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.code }} [{{ currency.currency }}]</option>
+        </select>
+      </div>
+      <div class="col-12 mt-4">
+        <label for="currentValueInput">Aktualny kurs:</label>
+        <input type="text" class="form-control" disabled id="currentValueInput" name="currentValue" [value]="currentRate">
+      </div>
+      <div class="col-12 mt-4">
+        <label for="amountInput">Kwota do przeliczenia:</label>
+        <input type="number" class="form-control" id="amountInput" name="amount" #amountInput>
+      </div>
+      <div class="col-12 mt-4 text-center">
+        <button class="btn btn-primary" (click)="onSubmit(amountInput.value)">Kalkuluj!</button>
+      </div>
+    </div> 
+  </div>
+  

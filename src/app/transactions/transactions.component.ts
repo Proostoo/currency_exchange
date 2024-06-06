@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -18,6 +18,7 @@ interface Transaction {
 })
 export class TransactionsComponent implements OnInit {
   transactions: Transaction[] = [];
+  @Input() selectedCurrency: string | undefined;
 
   constructor(private http: HttpClient) {}
 
@@ -31,4 +32,6 @@ export class TransactionsComponent implements OnInit {
     const apiUrl = 'http://localhost:8000/api/transactions/';
     return this.http.get<Transaction[]>(apiUrl);
   }
+
+
 }
