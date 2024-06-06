@@ -1,5 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+// currency-form.component.ts
+
+import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { NbpApiResponse } from '../nbp-api-response.model';
 
 interface Currency {
@@ -15,6 +17,7 @@ interface Currency {
 export class CurrencyFormComponent implements OnInit {
   public currencies: Currency[] = [];
   @Output() currencySelected = new EventEmitter<string>();
+  @ViewChild('amountInput') amountInput!: ElementRef;
 
   selectedCurrency: string | null = null;
   currentRate: number | null = null;
@@ -62,9 +65,6 @@ export class CurrencyFormComponent implements OnInit {
     );
   }
 
-
-
-
   insertTransaction(amount: number) {
     const transactionData = {
       user_name: 'user',
@@ -74,12 +74,15 @@ export class CurrencyFormComponent implements OnInit {
       to_currency_amount: this.calculateToCurrencyAmount(amount),
       date: new Date().toISOString() // generowanie bieżącej daty w odpowiednim formacie
     };
-console.log(transactionData);
 
     this.http.post<any>(`http://localhost:8000/api/transactions/`, transactionData)
       .subscribe(
         response => {
           console.log('Transaction added successfully:', response);
+          // Emitowanie zdarzenia, aby TransactionsComponent odświeżył dane
+          const event = new CustomEvent('transactionAdded');
+          window.dispatchEvent(event);
+          this.amountInput.nativeElement.value = ''; // Wyczyść pole formularza
           // Możesz dodać tutaj obsługę, co się stanie po dodaniu transakcji
         },
         error => {
@@ -89,11 +92,9 @@ console.log(transactionData);
       );
   }
 
-
-
   calculateToCurrencyAmount(amount: number): number {
     if (this.currentRate) {
-      const result = amount * this.currentRate;
+      const result = amount / this.currentRate;
       return Number(result.toFixed(4));  
     }
     return 0;
@@ -107,9 +108,6 @@ console.log(transactionData);
   }
 
   onSubmit(amount: string): void {
-    console.log(amount + "elo");
     this.insertTransaction(parseFloat(amount));
   }
-
-
 }

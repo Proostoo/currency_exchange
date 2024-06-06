@@ -1,3 +1,5 @@
+// transactions.component.ts
+
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -11,10 +13,11 @@ interface Transaction {
   to_currency_amount: string;
   date: string;
 }
+
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
-  styleUrl: './transactions.component.css'
+  styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
   transactions: Transaction[] = [];
@@ -23,9 +26,11 @@ export class TransactionsComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.getTransactions().subscribe(transactions => {
-      this.transactions = transactions;
-    });
+    this.refreshTransactions();
+
+    // Subskrybujemy się na zdarzenia z dodawania transakcji
+    // i odświeżamy listę transakcji w odpowiedzi na to zdarzenie
+    this.subscribeToTransactionAdded();
   }
 
   getTransactions(): Observable<Transaction[]> {
@@ -33,5 +38,17 @@ export class TransactionsComponent implements OnInit {
     return this.http.get<Transaction[]>(apiUrl);
   }
 
+  refreshTransactions() {
+    this.getTransactions().subscribe(transactions => {
+      this.transactions = transactions;
+    });
+  }
 
+  private subscribeToTransactionAdded() {
+    // Subskrybuj na zdarzenie z CurrencyFormComponent dotyczące dodania transakcji
+    // i odśwież listę transakcji
+    window.addEventListener('transactionAdded', () => {
+      this.refreshTransactions();
+    });
+  }
 }
