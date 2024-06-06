@@ -1,10 +1,21 @@
 <!-- currency-form.component.html -->
 
-<div class="form-group">
-    <div class="col-3">
-        <label for="currencySelect">Waluta:</label>
-        <select #currency id="currencySelect" class="form-control" (change)="onCurrencySelected(currency.value)">
-            <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.code }}</option>
-        </select>
+<div class="d-flex align-items-center h-100 calculatoform p-5" >
+    <div class="form-group m-4">
+        <div class="col-12">
+            <label for="currencySelect">Waluta:</label>
+            <select #currency id="currencySelect" class="form-control mt-2"
+                (change)="onCurrencySelected(currency.value)">
+                <option *ngFor="let currency of currencies" [value]="currency.code">[{{ currency.code }}] {{
+                    currency.currency }}</option>
+            </select>
+        </div>
+        <div class="col-12 mt-5">
+            <label for="amountInput">Kwota do przeliczenia:</label>
+            <input type="number" class="form-control" id="amountInput" name="amount">
+        </div>
+        <div class="col-12 mt-5  text-center">
+            <button class="btn btn-primary" >Kalkuluj!</button>
+        </div>
     </div>
 </div>

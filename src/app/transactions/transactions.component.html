@@ -1,0 +1,23 @@
+<div class="container mt-4 text-center">
+    <h2>Lista Transakcji</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Z waluty</th>
+          <th>Kwota (z waluty)</th>
+          <th>Do waluty</th>
+          <th>Kwota (do waluty)</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactions">
+          <td>{{ transaction.from_currency }}</td>
+          <td>{{ transaction.from_currency_amount }}</td>
+          <td>{{ transaction.to_currency }}</td>
+          <td>{{ transaction.to_currency_amount }}</td>
+          <td>{{ transaction.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

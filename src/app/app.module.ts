@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrencyFormComponent } from './currency-form/currency-form.component';
+import { TransactionsComponent } from './transactions/transactions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LineChartComponent,
     CurrencyFormComponent,
+    TransactionsComponent,
     
   ],
   imports: [
