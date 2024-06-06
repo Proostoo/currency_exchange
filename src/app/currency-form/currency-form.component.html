@@ -1,0 +1,10 @@
+<!-- currency-form.component.html -->
+
+<div class="form-group">
+    <div class="col-3">
+        <label for="currencySelect">Waluta:</label>
+        <select #currency id="currencySelect" class="form-control" (change)="onCurrencySelected(currency.value)">
+            <option *ngFor="let currency of currencies" [value]="currency.code">{{ currency.code }}</option>
+        </select>
+    </div>
+</div>
