@@ -1,5 +1,3 @@
-// transactions.component.ts
-
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -27,9 +25,6 @@ export class TransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshTransactions();
-
-    // Subskrybujemy się na zdarzenia z dodawania transakcji
-    // i odświeżamy listę transakcji w odpowiedzi na to zdarzenie
     this.subscribeToTransactionAdded();
   }
 
@@ -44,9 +39,21 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
+  deleteTransaction(transactionId: number): Observable<any> {
+    const apiUrl = `http://localhost:8000/api/transactions/${transactionId}/`;
+    return this.http.delete(apiUrl);
+  }
+
+  onDeleteTransaction(transactionId: number) {
+    if (confirm('Czy na pewno chcesz usunąć tę transakcję?')) {
+      this.deleteTransaction(transactionId).subscribe(() => {
+        // After deletion, refresh the transactions list
+        this.refreshTransactions();
+      });
+    }
+  }
+
   private subscribeToTransactionAdded() {
-    // Subskrybuj na zdarzenie z CurrencyFormComponent dotyczące dodania transakcji
-    // i odśwież listę transakcji
     window.addEventListener('transactionAdded', () => {
       this.refreshTransactions();
     });

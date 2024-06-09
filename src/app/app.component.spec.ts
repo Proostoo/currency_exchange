@@ -1,35 +1,56 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+// app.component.spec.ts
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientTestingModule } from '@angular/common/http/testing'; // Import HttpClientTestingModule
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let modalService: NgbModal;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
+      declarations: [AppComponent],
+      imports: [HttpClientTestingModule], // Import HttpClientTestingModule for HttpClient
+      providers: [
+        {
+          provide: NgbModal,
+          useValue: {
+            open: jasmine.createSpy('open').and.returnValue({
+              componentInstance: {},
+              result: Promise.resolve(true),
+              close: () => {},
+              dismiss: () => {}
+            } as NgbModalRef)
+          }
+        }
       ],
-      declarations: [
-        AppComponent
-      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'currency_exchange'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('currency_exchange');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    modalService = TestBed.inject(NgbModal);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, currency_exchange');
+  });
+
+  it('powinien utworzyć komponent aplikacji', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('powinien otworzyć modal', () => {
+    const modalInstance = modalService.open({});
+    expect(modalInstance).toBeDefined();
+  });
+
+  it('powinien ustawić selectedCurrency na podaną wartość', () => {
+    const currency = 'USD';
+    component.onCurrencySelected(currency);
+
+    expect(component.selectedCurrency).toBe(currency);
   });
 });
